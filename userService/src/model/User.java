@@ -144,7 +144,92 @@ public class User {
 		}
 		return output;
 	}
+	
+	public String readUsersAppointmentsHistory(String Ruser_ID1) {
+		String output = "";
+		try {
+			Connection con = connect();
+			if (con == null) {
+				return "Error while connecting to the database for reading.";
+			}
+			// Prepare the html table to be displayed
+			output = "<table border=\"1\"><tr><th>Appointment_ID</th><th>Ruser_ID</th><th>Rdoctor_ID</th><th>Hospital_ID</th><th>Rdoctor_name</th><th>Appointment_type</th><th>Appointment_no</th><th>Appointment_date</th><th>Appointment_description</th></tr>";
+			String query = "select * from appointment where Ruser_ID="+ Ruser_ID1;
+			Statement stmt = (Statement) con.createStatement();
+			ResultSet rs = ((java.sql.Statement) stmt).executeQuery(query);
+			// iterate through the rows in the result set
+			while (rs.next())
+			{
+				String Appointment_ID = Integer.toString(rs.getInt("Appointment_ID"));
+				String Ruser_ID = Integer.toString(rs.getInt("Ruser_ID"));
+				String Rdoctor_ID = Integer.toString(rs.getInt("Rdoctor_ID"));
+				String Rdoctor_name = rs.getString("Rdoctor_name");
+				String Hospital_ID = Integer.toString(rs.getInt("Hospital_ID"));
+				String Appointment_type = rs.getString("Appointment_type");
+				String Appointment_no = Integer.toString(rs.getInt("Appointment_no"));
+				String Appointment_date = rs.getString("Appointment_date");
+				String Appointment_description = rs.getString("Appointment_description");
+	
+				// Add into the html table
+				output += "<tr><td>" + Appointment_ID + "</td>";
+				output += "<td>" + Ruser_ID + "</td>";
+				output += "<td>" + Rdoctor_ID + "</td>";
+				output += "<td>" + Rdoctor_name + "</td>";
+				output += "<td>" + Hospital_ID + "</td>";
+				output += "<td>" + Appointment_type + "</td>";
+				output += "<td>" + Appointment_no + "</td>";
+				output += "<td>" + Appointment_date + "</td>";
+				output += "<td>" + Appointment_description + "</td>";
+	
+			}
+			con.close();
+			// Complete the html table
+			output += "</table>";
+		} catch (Exception e) {
+			output = "Error while reading the users appointments.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
+	
+	public String userLogin(String Ruser_name, String Ruser_ID) {
+		String output = "";
+		try {
+			Connection con = connect();
+			if (con == null) {
+				return "Error while connecting to the database for reading.";
+			}
+			
+			String query ="select Ruser_ID,Ruser_name from reg_user where Ruser_name="+Ruser_name+" AND Ruser_ID="+Ruser_ID;
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			ResultSet rs = ((java.sql.Statement) preparedStmt).executeQuery(query);
+			
+			
+			  while (rs.next()) {
+			        //String Ruser_name1 = rs.getString("Ruser_name");
+			        String Ruser_ID1 = rs.getString("Ruser_ID");
+			        
+			  
+			        if((Ruser_name.equalsIgnoreCase(Ruser_name)) && (Ruser_ID.equalsIgnoreCase(Ruser_ID1))) {
+			        	//output ="     Login Failed  !!";
+			        	output ="     Login Successful  !!           You're logged as"   +Ruser_name;
+			        	}
+		              else {
+		                output ="      Login Failed...!!";
+		            	 //output ="     Login Successful  !!           You're logged as"   +Ruser_name;
+		              	} 
+			  	}
+			
+			con.close();
+			
+		}catch (Exception e) {
+			output = "Error while Logging.";
+			System.err.println(e.getMessage());
+		}
+		return output;
+	}
 }
+
 
 
 

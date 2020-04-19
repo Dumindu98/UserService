@@ -1,5 +1,6 @@
 package com;
 
+import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -83,6 +84,22 @@ public class UserService {
 		String output = itemObj.deleteItem(Ruser_ID);
 
 		return output;
+	}
+	
+	@GET
+	@Path("/UserAppo/{Ruser_ID}")
+	@Produces(MediaType.TEXT_HTML)
+	public String readUsersAppointmentsHistory(@PathParam("Ruser_ID") String Ruser_ID) {
+		return itemObj.readUsersAppointmentsHistory(Ruser_ID);
+		//appointments details for selected user
+	}
+	
+	@GET
+	@Path("/UsersAuthentication/{Ruser_name}/{Ruser_ID}")
+	@Produces(MediaType.TEXT_HTML)
+	public String userLogin (@PathParam("Ruser_name")String Ruser_name,@PathParam("Ruser_ID")String Ruser_ID) {
+		return itemObj.userLogin(Ruser_name,Ruser_ID);
+		//appointments details for selected user
 	}
 
 }
